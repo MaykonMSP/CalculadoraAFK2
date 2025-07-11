@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora AFK VIP</title>
+  <style>
+    body {
+      background: #121212;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #1e1e1e;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 200, 0.15);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffc3;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2b2b2b;
+      color: #f0f0f0;
+    }
+
+    .vip-option {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background-color: #00ffc3;
+      color: #000;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00cfa1;
+    }
+
+    #resultado {
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #2b2b2b;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💎 Calculadora AFK</h1>
+
+    <label>🕒 Hora atual (24h):</label>
+    <input id="horaAtual" type="number" min="0" max="23">
+
+    <label>🕒 Minuto atual:</label>
+    <input id="minutoAtual" type="number" min="0" max="59">
+
+    <label>⏰ Hora final:</label>
+    <input id="horaFinal" type="number" min="0" max="23">
+
+    <label>⏰ Minuto final:</label>
+    <input id="minutoFinal" type="number" min="0" max="59">
+
+    <div class="vip-option">
+      <input type="checkbox" id="vip">
+      <label for="vip">Ativar modo VIP (💎x6)</label>
+    </div>
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div id="resultado"></div>
+  </div>
+
+  <script>
+    function converterParaSegundos(h, m) {
+      return h * 3600 + m * 60;
+    }
+
+    function calcular() {
+      let horaAtual = parseInt(document.getElementById("horaAtual").value);
+      let minutoAtual = parseInt(document.getElementById("minutoAtual").value);
+      let horaFinal = parseInt(document.getElementById("horaFinal").value);
+      let minutoFinal = parseInt(document.getElementById("minutoFinal").value);
+      let isVip = document.getElementById("vip").checked;
+
+      if (isNaN(horaAtual) || isNaN(minutoAtual) || isNaN(horaFinal) || isNaN(minutoFinal)) {
+        document.getElementById("resultado").innerHTML = "❌ Preencha todos os campos!";
+        return;
+      }
+
+      const intervaloSegundos = 80;
+      const gemasPorCiclo = isVip ? 6 : 3;
+
+      let tempoAtual = converterParaSegundos(horaAtual, minutoAtual);
+      let tempoFinal = converterParaSegundos(horaFinal, minutoFinal);
+
+      if (tempoFinal <= tempoAtual) {
+        tempoFinal += 24 * 3600;
+      }
+
+      let tempoTotal = tempoFinal - tempoAtual;
+      let ciclos = Math.floor(tempoTotal / intervaloSegundos);
+      let gemas = ciclos * gemasPorCiclo;
+
+      let horas = Math.floor(tempoTotal / 3600);
+      let minutos = Math.floor((tempoTotal % 3600) / 60);
+
+      document.getElementById("resultado").innerHTML = `
+        ⏳ Tempo AFK: ${horas}h e ${minutos}min<br>
+        🔁 Ciclos completos: ${ciclos}<br>
+        💎 Gemas acumuladas: ${gemas}
+      `;
+    }
+  </script>
+</body>
+</html>
